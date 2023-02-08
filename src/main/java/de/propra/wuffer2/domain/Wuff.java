@@ -10,19 +10,19 @@ public class Wuff {
   private final @Id Integer id;
   private final String text;
   private final AggregateReference<Profile, Integer> profile;
-  private final LocalDateTime timestamp;
+  private final LocalDateTime createdAt;
 
   @PersistenceCreator
-  public Wuff(Integer id, String text, Profile profile,
-              LocalDateTime timestamp) {
+  public Wuff(Integer id, String text, AggregateReference<Profile, Integer> profile,
+              LocalDateTime createdAt) {
     this.id = id;
     this.text = text;
-    this.profile = AggregateReference.to(profile.getId());
-    this.timestamp = timestamp;
+    this.profile = profile;
+    this.createdAt = createdAt;
   }
 
-  public Wuff(String text, Profile profile, LocalDateTime timestamp) {
-    this(null, text, profile, timestamp);
+  public Wuff(String text, Profile profile, LocalDateTime createdAt) {
+    this(null, text, AggregateReference.to(profile.getId()), createdAt);
   }
 
   public Integer getId() {
@@ -37,8 +37,8 @@ public class Wuff {
     return profile;
   }
 
-  public LocalDateTime getTimestamp() {
-    return timestamp;
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 
   @Override
@@ -47,7 +47,7 @@ public class Wuff {
         "id=" + id +
         ", text='" + text + '\'' +
         ", profile=" + profile +
-        ", timestamp=" + timestamp +
+        ", createdAt=" + createdAt +
         '}';
   }
 }

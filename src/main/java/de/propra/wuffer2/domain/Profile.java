@@ -4,7 +4,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 
 public class Profile {
-
   private final @Id Integer id;
   private final Integer profileId;
   private final String name;
