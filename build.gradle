@@ -31,7 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     // HTML Sanitizer
-    implementation 'com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20211018.1'
+    implementation 'org.jsoup:jsoup:1.15.3'
 
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
