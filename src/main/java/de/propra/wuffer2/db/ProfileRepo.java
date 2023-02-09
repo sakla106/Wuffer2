@@ -12,4 +12,6 @@ public interface ProfileRepo extends CrudRepository<Profile, Integer> {
   List<Profile> findAll();
 
   Optional<Profile> findByProfileId(Integer profileId);
+
+  Optional<Profile> findByName(String name);
 }

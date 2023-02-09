@@ -15,7 +15,10 @@ public class WebSecurityConfiguration {
                 .antMatchers("/css/*").permitAll()
                 .anyRequest().authenticated()
         )
-        .oauth2Login();
+        .oauth2Login()
+        .and()
+        .csrf().disable()
+        .headers().frameOptions().disable();
 
     return chainBuilder.build();
   }

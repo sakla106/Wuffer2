@@ -1,6 +1,15 @@
 package de.propra.wuffer2.web;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -32,5 +41,50 @@ class WuffControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("index"));
   }
+
+  @Test
+  @DisplayName("p with Es sind noch keine Wuffs vorhanden is shown if no wuffs are present")
+  void noWuffs() throws Exception {
+    when(service.anyWuffsPresent()).thenReturn(false);
+    mvc.perform(get("/"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("index"))
+        .andExpect(
+            content().string(containsString("Es sind noch keine Wuffs vorhanden")));
+  }
+
+  @Test
+  @DisplayName("<a> with Alle Wuffs is shown if model attribute anyWuffsPresent is true")
+  void anyWuffs() throws Exception {
+    when(service.anyWuffsPresent()).thenReturn(true);
+    mvc.perform(get("/"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("index"))
+        .andExpect(content().string(containsString("Alle Wuffs")));
+  }
+
+  @Test
+  @DisplayName("addWuff is called with text if valid form is submitted")
+  void addWuff() throws Exception {
+    String text = "Hallo";
+    mvc.perform(post("/sendWuff").param("text", text))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/"));
+    verify(service).addWuff(any(), eq(text), any());
+  }
+
+
+  @Test
+  @DisplayName("error message is shown in index and addWuff is not called if invalid form is " +
+      "submitted")
+  void addWuffInvalidErrorMessage() throws Exception {
+    String text = "Hallo".repeat(61);
+    mvc.perform(post("/sendWuff").param("text", text))
+        .andExpect(view().name("index"))
+        .andExpect(
+            content().string(containsString("Wufftext muss zwischen 1 und 300 Zeichen lang sein")));
+    verify(service, never()).addWuff(any(), any(), any());
+  }
+
 
 }

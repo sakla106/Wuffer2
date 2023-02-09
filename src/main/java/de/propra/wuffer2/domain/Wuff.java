@@ -21,6 +21,10 @@ public class Wuff {
     this.createdAt = createdAt;
   }
 
+  public Wuff(Integer id, String text, Profile profile, LocalDateTime createdAt) {
+    this(id, text, AggregateReference.to(profile.getId()), createdAt);
+  }
+
   public Wuff(String text, Profile profile, LocalDateTime createdAt) {
     this(null, text, AggregateReference.to(profile.getId()), createdAt);
   }

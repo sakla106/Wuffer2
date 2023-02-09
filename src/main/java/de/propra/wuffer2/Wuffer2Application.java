@@ -11,4 +11,5 @@ public class Wuffer2Application {
     SpringApplication.run(Wuffer2Application.class, args);
   }
 
+
 }

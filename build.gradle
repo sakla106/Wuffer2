@@ -36,7 +36,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'net.sourceforge.htmlunit:htmlunit:2.37.0'
-    testRuntimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.h2database:h2'
 
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
