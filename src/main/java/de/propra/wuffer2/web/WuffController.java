@@ -6,6 +6,8 @@ import de.propra.wuffer2.service.WufferService;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,11 +37,13 @@ public class WuffController {
     return "index";
   }
 
+  //TODO: wenn Jsoup den kompletten Input löscht, wird die Validierung nicht ausgelöst
   @PostMapping("/sendWuff")
   public String sendWuff(@Valid WuffText wuffText, OAuth2AuthenticationToken authenticationToken,
                          RedirectAttributes attrs) {
-    System.out.println("WuffController.sendWuff: " + wuffText.text());
-    service.addWuff(authenticationToken.getPrincipal(), wuffText.text(), LocalDateTime.now());
+    String cleanText = Jsoup.clean(wuffText.text(), Safelist.relaxed());
+    System.out.println("WuffController.sendWuff: " + cleanText);
+    service.addWuff(authenticationToken.getPrincipal(), cleanText, LocalDateTime.now());
     return "redirect:/";
   }
 
