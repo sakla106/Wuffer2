@@ -50,6 +50,11 @@
                     <span class="fw-bold" th:text="${profile.username}" id="username">Name</span></li>
                 <li class="list-group-item">Profile Id:
                     <span class="fw-bold" th:text="${profile.profileId}" id="profileId">33</span></li>
+                <li class="list-group-item">Name: <span class="fw-bold" id="name"></span></li>
+                <li class="list-group-item">Email: <span class="fw-bold" id="email"></span></li>
+                <li class="list-group-item">Location: <span class="fw-bold" id="location"></span></li>
+                <li class="list-group-item">Followers: <span class="fw-bold" id="followers"></span></li>
+                <li class="list-group-item">Following: <span class="fw-bold" id="following"></span></li>
                 <li class="list-group-item">To GitHub:
                     <a th:href="${profile.githubUrl}" th:text="${profile.githubUrl}" id="toGithub">Hi</a>
                 </li>
@@ -64,6 +69,21 @@
         <a href="/" class="btn btn-primary">Zurück</a>
     </div>
 </div>
+
+<script th:inline="javascript" th:if="${profile}">
+    // Replace with your own GitHub OAuth2 API request
+    var user = /*[[${profile.username}]]*/ 'default';
+    fetch(`https://api.github.com/users/${user}`)
+        .then(response => response.json())
+        .then(data => {
+            // document.querySelector("#username").textContent = data.login;
+            document.querySelector("#name").textContent = data.name == null ? "no public name" : data.name;
+            document.querySelector("#email").textContent = data.email == null ? "no public email" : data.email;
+            document.querySelector("#location").textContent = data.location == null ? "no public location" : data.location;
+            document.querySelector("#followers").textContent = data.followers == null ? "no public followers" : data.followers;
+            document.querySelector("#following").textContent = data.following == null ? "no public following" : data.following;
+        });
+</script>
 
 
 </body>
